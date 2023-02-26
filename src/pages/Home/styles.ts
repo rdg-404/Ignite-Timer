@@ -52,6 +52,10 @@ const BaseInput = styled.input`
 //styled() herda as props do component BaseInput
 export const TaskInput = styled(BaseInput)`
   flex: 1; //ocupa toda a area disponivel
+
+  &::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
 `
 export const MinutesAmountInput = styled(BaseInput)`
   width: 4rem
