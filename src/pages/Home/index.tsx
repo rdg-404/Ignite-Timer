@@ -5,27 +5,31 @@ import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, S
 
 export function Home() {
 
+  //register - funcao que retorna alguns metodos de input
+  // handleSubmit - permite usar os dados do formulario
+  // watch - observar algum elemento
   const {register, handleSubmit, watch} = useForm()
 
   function handleCreateNewCycle(data: any) {
     console.log(data)
   }
 
-  const [task, setTask] = useState('')
+
+  const task = watch('task')
+  const isSubmitDisabled = !task
+
+
 
   return (
     <HomeContainer>
-      <form>
+      <form onSubmit={handleSubmit(handleCreateNewCycle)}>
         <FormContainer>
           <label htmlFor="task">Vou trabalhar em</label>
           <TaskInput 
             id="task" 
             placeholder="Nome do projeto"
             list="task-suggestions" //usa as props abaixo
-
-            //monitora a cada vez digitada do user
-            onChange={(e) => setTask(e.target.value)}
-            value={task}
+            {...register('task')} //utiliza alguns metodos do input no campo task
           />
 
           <datalist id="task-suggestions">
@@ -44,6 +48,7 @@ export function Home() {
             step={5} //pula de 5 em 5
             min={5}
             max={60}
+            {...register('minutesAmount', {valueAsNumber: true})} 
           />
           
           <span>minutos.</span>
@@ -57,7 +62,7 @@ export function Home() {
         <span>0</span>
         </CountdownContainer>
 
-        <StartCountdownButton disabled={!task} type="submit">
+        <StartCountdownButton disabled={isSubmitDisabled} type="submit">
           <Play size={24}/>
           Começar
         </StartCountdownButton>
