@@ -26,7 +26,7 @@ export function Home() {
   //register - funcao que retorna alguns metodos de input
   // handleSubmit - permite usar os dados do formulario
   // watch - observar algum elemento
-  const {register, handleSubmit, watch} = useForm<NewCycleFormData>({
+  const {register, handleSubmit, watch, reset} = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
       task: '',
@@ -36,6 +36,7 @@ export function Home() {
 
   function handleCreateNewCycle(data: NewCycleFormData) {
     console.log(data)
+    reset() //apos enviar reseta os campos aos valores padrao
   }
 
 
