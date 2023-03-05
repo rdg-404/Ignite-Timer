@@ -19,9 +19,16 @@ const newCycleFormValidationSchema = zod.object({
 //referencia a variavel acima
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
-
+interface Cycle  {
+  id: string
+  task: string
+  minutesAmount: number
+}
 
 export function Home() {
+
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
 
   //register - funcao que retorna alguns metodos de input
   // handleSubmit - permite usar os dados do formulario
@@ -35,10 +42,25 @@ export function Home() {
   })
 
   function handleCreateNewCycle(data: NewCycleFormData) {
-    console.log(data)
+    const id = String(new Date().getTime())
+
+    //variavel se baseando nas props do ts
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setCycles((state) => [...state, newCycle])
+    setActiveCycleId(id)
     reset() //apos enviar reseta os campos aos valores padrao
   }
 
+
+  //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  console.log(activeCycle)
 
   const task = watch('task')
   const isSubmitDisabled = !task
