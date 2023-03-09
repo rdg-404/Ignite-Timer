@@ -103,6 +103,14 @@ export function Home() {
   const seconds = String(secondsAmount).padStart(2, "0")
 
 
+  //funcao para deixar o time no titulo ao mudar de aba
+  useEffect(() => {
+    if(activeCycle){
+      document.title= `${minutes}:${seconds}`
+    }
+  },[minutes, seconds, activeCycle])
+
+
   console.log(activeCycle)
 
   const task = watch('task')
