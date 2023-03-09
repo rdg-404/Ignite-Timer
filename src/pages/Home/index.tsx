@@ -52,11 +52,19 @@ export function Home() {
 
   //funcao para diminuir o time
   useEffect(()=> {
+
+    let interval: number
+
     if(activeCycle){
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(differenceInSeconds(new Date(), activeCycle.startDate),
         )
       }, 1000)
+    }
+
+    //limpar o set interval anterior
+    return () => {
+      clearInterval(interval)
     }
   }, [activeCycle])
 
@@ -70,10 +78,12 @@ export function Home() {
       task: data.task,
       minutesAmount: data.minutesAmount,
       startDate: new Date(),
+      
     }
 
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
+    setAmountSecondsPassed(0) //zerar a comtagem de segundos
     reset() //apos enviar reseta os campos aos valores padrao
   }
 
