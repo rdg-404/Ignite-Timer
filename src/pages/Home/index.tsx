@@ -26,6 +26,7 @@ interface Cycle  {
   minutesAmount: number
   startDate: Date
   interruptedDate?: Date
+  finishedDate?: Date
 }
 
 export function Home() {
@@ -51,15 +52,37 @@ export function Home() {
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
 
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
+
   //funcao para diminuir o time
   useEffect(()=> {
 
     let interval: number
 
+    /// funcao para parar o cronometro ao chegar a 0
     if(activeCycle){
       interval = setInterval(() => {
-        setAmountSecondsPassed(differenceInSeconds(new Date(), activeCycle.startDate),
+        const secondsDifference = differenceInSeconds( 
+          new Date(), 
+          activeCycle.startDate
         )
+
+        
+        if(secondsDifference >= totalSeconds){
+          setCycles(state => state.map((cycle) => {
+            if(cycle.id === activeCycleId) {
+              return {...cycle, finishedDate: new Date()}
+            }else {
+              return cycle
+            }
+          }),
+        )    
+        setAmountSecondsPassed(totalSeconds) //zera o cronometro em 0
+        clearInterval(interval)
+        }else {
+          setAmountSecondsPassed(secondsDifference)
+        }
+
       }, 1000)
     }
 
@@ -67,7 +90,7 @@ export function Home() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, totalSeconds, activeCycleId])
 
 
   function handleCreateNewCycle(data: NewCycleFormData) {
@@ -90,8 +113,8 @@ export function Home() {
 
   //funcao para salvar o ciclo atual interrompido
   function handleInterruptCycle(){
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles( (state) => 
+      state.map((cycle) => {
         if(cycle.id === activeCycleId) {
           return {...cycle, interruptedDate: new Date()}
         }else {
@@ -105,7 +128,7 @@ export function Home() {
 
   
 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
+
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
 
   //para evitar divisao quebrada
