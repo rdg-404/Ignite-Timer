@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
 import { differenceInSeconds } from "date-fns";
 import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountdownButton, StopCountdownButton, TaskInput } from "./styles";
+import { NewCycleForm } from "./components/NewCycleForm";
+import { Countdown } from "./components/Countdown";
 
 
 //funcao de validacao dos campos
@@ -159,46 +161,10 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
-        <FormContainer>
-          <label htmlFor="task">Vou trabalhar em</label>
-          <TaskInput 
-            id="task" 
-            placeholder="Nome do projeto"
-            list="task-suggestions" //usa as props abaixo
-            disabled={!!activeCycle}
-            {...register('task')} //utiliza alguns metodos do input no campo task
-          />
+      <NewCycleForm/>
+      <Countdown/>
 
-          <datalist id="task-suggestions">
-            <option value="Projeto 01"/>
-            <option value="Projeto 02"/>
-            <option value="Projeto 03"/>
-            <option value="Projeto 04"/>
-          </datalist>
-
-
-          <label htmlFor="minutesAmount">Durante</label>
-          <MinutesAmountInput 
-            type="Number" 
-            id="minutesAmount" 
-            placeholder="00" 
-            step={5} //pula de 5 em 5
-            min={5}
-            max={60}
-            disabled={!!activeCycle}
-            {...register('minutesAmount', {valueAsNumber: true})} 
-          />
-          
-          <span>minutos.</span>
-        </FormContainer>
-
-        <CountdownContainer>
-        <span>{minutes[0]}</span>
-        <span>{minutes[1]}</span>
-        <Separator>:</Separator>
-        <span>{seconds[0]}</span>
-        <span>{seconds[1]}</span>
-        </CountdownContainer>
+        
 
       {activeCycle ? (
         <StopCountdownButton onClick={handleInterruptCycle} type="button">
