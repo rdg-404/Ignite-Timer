@@ -1,10 +1,10 @@
-import { HandPalm, Play } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
+import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
-import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountdownButton, StopCountdownButton, TaskInput } from "./styles";
 import { differenceInSeconds } from "date-fns";
+import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountdownButton, StopCountdownButton, TaskInput } from "./styles";
 
 
 //funcao de validacao dos campos
