@@ -4,23 +4,12 @@ import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
 import { differenceInSeconds } from "date-fns";
-import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountdownButton, StopCountdownButton, TaskInput } from "./styles";
+import {  HomeContainer,  StartCountdownButton, StopCountdownButton } from "./styles";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
 
 
-//funcao de validacao dos campos
-const newCycleFormValidationSchema = zod.object({
-  task: zod.string().min(1, "Informe a tarefa"),
-  minutesAmount: zod
-  .number()
-  .min(5, "O ciclo precisa ser de no mínimo 5 minutos.")
-  .max(60, "O ciclo precisa ser de no máximo 60 minutos.")
-})
 
-
-//referencia a variavel acima
-type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 interface Cycle  {
   id: string
@@ -36,63 +25,10 @@ export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
 
-  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
-
-  //register - funcao que retorna alguns metodos de input
-  // handleSubmit - permite usar os dados do formulario
-  // watch - observar algum elemento
-  const {register, handleSubmit, watch, reset} = useForm<NewCycleFormData>({
-    resolver: zodResolver(newCycleFormValidationSchema),
-    defaultValues: {
-      task: '',
-      minutesAmount: 0,
-    }
-  })
 
 
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-
-
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
-
-  //funcao para diminuir o time
-  useEffect(()=> {
-
-    let interval: number
-
-    /// funcao para parar o cronometro ao chegar a 0
-    if(activeCycle){
-      interval = setInterval(() => {
-        const secondsDifference = differenceInSeconds( 
-          new Date(), 
-          activeCycle.startDate
-        )
-
-        
-        if(secondsDifference >= totalSeconds){
-          setCycles(state => state.map((cycle) => {
-            if(cycle.id === activeCycleId) {
-              return {...cycle, finishedDate: new Date()}
-            }else {
-              return cycle
-            }
-          }),
-        )    
-        setAmountSecondsPassed(totalSeconds) //zera o cronometro em 0
-        clearInterval(interval)
-        }else {
-          setAmountSecondsPassed(secondsDifference)
-        }
-
-      }, 1000)
-    }
-
-    //limpar o set interval anterior
-    return () => {
-      clearInterval(interval)
-    }
-  }, [activeCycle, totalSeconds, activeCycleId])
 
 
   function handleCreateNewCycle(data: NewCycleFormData) {
@@ -162,7 +98,7 @@ export function Home() {
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
       <NewCycleForm/>
-      <Countdown/>
+      <Countdown activeCycle={activeCycle} setCycles={setCycles}/>
 
         
 
