@@ -23,6 +23,7 @@ interface Cycle  {
 
 interface CycleContextType {
   activeCycle: Cycle | undefined
+  activeCycleId: string | null
 }
 
 export const CycleContext = createContext({} as CycleContextType)
@@ -75,24 +76,7 @@ export function Home() {
   
 
 
-  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
-
-  //para evitar divisao quebrada
-  const minutesAmount = Math.floor(currentSeconds / 60)
-  const secondsAmount = currentSeconds % 60
-
-
-  //padStart a variabel tera 2 posicoes caso nao tenha inicia com 0
-  const minutes = String(minutesAmount).padStart(2, "0")
-  const seconds = String(secondsAmount).padStart(2, "0")
-
-
-  //funcao para deixar o time no titulo ao mudar de aba
-  useEffect(() => {
-    if(activeCycle){
-      document.title= `${minutes}:${seconds}`
-    }
-  },[minutes, seconds, activeCycle])
+  
 
 
   console.log(activeCycle)
@@ -105,7 +89,7 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
-        <CycleContext.Provider value={{ activeCycle }}>
+        <CycleContext.Provider value={{ activeCycle, activeCycleId }}>
           <NewCycleForm/>
           <Countdown />
         </CycleContext.Provider>
