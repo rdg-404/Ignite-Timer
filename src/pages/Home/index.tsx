@@ -24,6 +24,7 @@ interface Cycle  {
 interface CycleContextType {
   activeCycle: Cycle | undefined
   activeCycleId: string | null
+  markCurrentCycleAsFinished: () => void 
 }
 
 export const CycleContext = createContext({} as CycleContextType)
@@ -33,12 +34,20 @@ export function Home() {
 
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-
-
-
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
+  function markCurrentCycleAsFinished(){
+    setCycles((state) => 
+      state.map((cycle) => {
+        if(cycle.id === activeCycleId) {
+          return {...cycle, finishedDate: new Date()}
+        }else {
+          return cycle
+        }
+      }),
+    )
+  }
 
   function handleCreateNewCycle(data: NewCycleFormData) {
     const id = String(new Date().getTime())
@@ -73,10 +82,6 @@ export function Home() {
     setActiveCycleId(null)
   }
 
-  
-
-
-  
 
 
   console.log(activeCycle)
@@ -89,7 +94,7 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
-        <CycleContext.Provider value={{ activeCycle, activeCycleId }}>
+        <CycleContext.Provider value={{ activeCycle, activeCycleId, markCurrentCycleAsFinished }}>
           <NewCycleForm/>
           <Countdown />
         </CycleContext.Provider>

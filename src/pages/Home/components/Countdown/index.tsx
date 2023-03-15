@@ -5,7 +5,7 @@ import { CountdownContainer, Separator } from "./styles";
 
 
 export function Countdown( ){
-  const { activeCycle, activeCycleId } = useContext(CycleContext)
+  const { activeCycle, activeCycleId, markCurrentCycleAsFinished } = useContext(CycleContext)
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
 
@@ -24,16 +24,9 @@ export function Countdown( ){
 
         
         if(secondsDifference >= totalSeconds){
-          setCycles(state => state.map((cycle) => {
-            if(cycle.id === activeCycleId) {
-              return {...cycle, finishedDate: new Date()}
-            }else {
-              return cycle
-            }
-          }),
-        )    
-        setAmountSecondsPassed(totalSeconds) //zera o cronometro em 0
-        clearInterval(interval)
+          markCurrentCycleAsFinished()   
+          setAmountSecondsPassed(totalSeconds) //zera o cronometro em 0
+          clearInterval(interval)
         }else {
           setAmountSecondsPassed(secondsDifference)
         }
