@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
 import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,6 +19,14 @@ interface Cycle  {
   interruptedDate?: Date
   finishedDate?: Date
 }
+
+
+interface CycleContextType {
+  activeCycle: Cycle | undefined
+}
+
+export const CycleContext = createContext({} as CycleContextType)
+
 
 export function Home() {
 
@@ -97,10 +105,10 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
-      <NewCycleForm/>
-      <Countdown activeCycle={activeCycle} setCycles={setCycles}/>
-
-        
+        <CycleContext.Provider value={{ activeCycle }}>
+          <NewCycleForm/>
+          <Countdown />
+        </CycleContext.Provider>
 
       {activeCycle ? (
         <StopCountdownButton onClick={handleInterruptCycle} type="button">
