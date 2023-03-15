@@ -49,23 +49,23 @@ export function Home() {
     )
   }
 
-  function handleCreateNewCycle(data: NewCycleFormData) {
-    const id = String(new Date().getTime())
+  // function handleCreateNewCycle(data: NewCycleFormData) {
+  //   const id = String(new Date().getTime())
 
-    //variavel se baseando nas props do ts
-    const newCycle: Cycle = {
-      id,
-      task: data.task,
-      minutesAmount: data.minutesAmount,
-      startDate: new Date(),
+  //   //variavel se baseando nas props do ts
+  //   const newCycle: Cycle = {
+  //     id,
+  //     task: data.task,
+  //     minutesAmount: data.minutesAmount,
+  //     startDate: new Date(),
       
-    }
+  //   }
 
-    setCycles((state) => [...state, newCycle])
-    setActiveCycleId(id)
-    setAmountSecondsPassed(0) //zerar a comtagem de segundos
-    reset() //apos enviar reseta os campos aos valores padrao
-  }
+  //   setCycles((state) => [...state, newCycle])
+  //   setActiveCycleId(id)
+  //   setAmountSecondsPassed(0) //zerar a comtagem de segundos
+  //   reset() //apos enviar reseta os campos aos valores padrao
+  // }
 
   //funcao para salvar o ciclo atual interrompido
   function handleInterruptCycle(){
@@ -86,16 +86,16 @@ export function Home() {
 
   console.log(activeCycle)
 
-  const task = watch('task')
-  const isSubmitDisabled = !task
+  // const task = watch('task')
+  // const isSubmitDisabled = !task
 
 
 
   return (
     <HomeContainer>
-      <form onSubmit={handleSubmit(handleCreateNewCycle)}>
+      <form /*onSubmit={handleSubmit(handleCreateNewCycle)}*/>
         <CycleContext.Provider value={{ activeCycle, activeCycleId, markCurrentCycleAsFinished }}>
-          <NewCycleForm/>
+          {/* <NewCycleForm/> */}
           <Countdown />
         </CycleContext.Provider>
 
@@ -105,7 +105,7 @@ export function Home() {
           Interromper
         </StopCountdownButton>
       ) : (
-        <StartCountdownButton disabled={isSubmitDisabled} type="submit">
+        <StartCountdownButton /*disabled={isSubmitDisabled}*/ type="submit">
           <Play size={24}/>
           Começar
         </StartCountdownButton>
