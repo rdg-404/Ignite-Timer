@@ -54,12 +54,9 @@ export function Countdown( ){
 
 
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
-
   //para evitar divisao quebrada
   const minutesAmount = Math.floor(currentSeconds / 60)
   const secondsAmount = currentSeconds % 60
-
-
   //padStart a variabel tera 2 posicoes caso nao tenha inicia com 0
   const minutes = String(minutesAmount).padStart(2, "0")
   const seconds = String(secondsAmount).padStart(2, "0")

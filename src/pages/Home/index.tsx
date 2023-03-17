@@ -1,13 +1,11 @@
-import { createContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form"
+import { createContext, useState } from "react";
+import { useForm, FormProvider } from "react-hook-form"
 import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
 import {  HomeContainer,  StartCountdownButton, StopCountdownButton } from "./styles";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
-import { FormProvider } from "react-hook-form/dist/useFormContext";
-
 
 
 
@@ -26,12 +24,10 @@ interface CycleContextType {
   activeCycleId: string | null
   amountSecondsPassed: number,
   markCurrentCycleAsFinished: () => void 
-  setSecondsPassed: (seconds: number) => void
-  
+  setSecondsPassed: (seconds: number) => void 
 }
 
 export const CycleContext = createContext({} as CycleContextType)
-
 
 //funcao de validacao dos campos
 const newCycleFormValidationSchema = zod.object({
@@ -42,18 +38,15 @@ const newCycleFormValidationSchema = zod.object({
   .max(60, "O ciclo precisa ser de no máximo 60 minutos.")
 })
 
-
 //referencia a variavel acima
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 
 export function Home() {
-
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
-
   const newCycleForm = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
@@ -61,12 +54,9 @@ export function Home() {
       minutesAmount: 0,
     }
   })
-
-
-
   const {handleSubmit, watch, reset} = newCycleForm
-
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
 
   function setSecondsPassed(seconds: number){
     setAmountSecondsPassed(seconds)
@@ -117,13 +107,10 @@ export function Home() {
     setActiveCycleId(null)
   }
 
-
-
-  console.log(activeCycle)
+  // console.log(activeCycle)
 
   const task = watch('task')
   const isSubmitDisabled = !task
-
 
 
   return (
