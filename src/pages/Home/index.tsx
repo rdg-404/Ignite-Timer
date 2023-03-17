@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form"
 import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
-import { differenceInSeconds } from "date-fns";
 import {  HomeContainer,  StartCountdownButton, StopCountdownButton } from "./styles";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
@@ -25,7 +24,10 @@ interface Cycle  {
 interface CycleContextType {
   activeCycle: Cycle | undefined
   activeCycleId: string | null
+  amountSecondsPassed: number,
   markCurrentCycleAsFinished: () => void 
+  setSecondsPassed: (seconds: number) => void
+  
 }
 
 export const CycleContext = createContext({} as CycleContextType)
@@ -50,6 +52,7 @@ export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
+  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
 
   const newCycleForm = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
@@ -64,6 +67,10 @@ export function Home() {
   const {handleSubmit, watch, reset} = newCycleForm
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  function setSecondsPassed(seconds: number){
+    setAmountSecondsPassed(seconds)
+  }
 
   function markCurrentCycleAsFinished(){
     setCycles((state) => 
@@ -122,7 +129,14 @@ export function Home() {
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)}>
-        <CycleContext.Provider value={{ activeCycle, activeCycleId, markCurrentCycleAsFinished }}>
+        <CycleContext.Provider 
+          value={{ 
+            activeCycle, 
+            activeCycleId, 
+            markCurrentCycleAsFinished, 
+            amountSecondsPassed,
+            setSecondsPassed
+          }}>
           <FormProvider {...newCycleForm}> 
             <NewCycleForm/>
           </FormProvider>
