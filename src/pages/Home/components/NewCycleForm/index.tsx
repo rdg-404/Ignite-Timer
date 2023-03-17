@@ -2,6 +2,8 @@ import { FormContainer, MinutesAmountInput, TaskInput } from "./styles";
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { CycleContext } from "../..";
 
 //funcao de validacao dos campos
 const newCycleFormValidationSchema = zod.object({
@@ -18,7 +20,7 @@ type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 
 export function NewCycleForm() {
-  
+  const {activeCycle} = useContext(CycleContext)
   //register - funcao que retorna alguns metodos de input
   // handleSubmit - permite usar os dados do formulario
   // watch - observar algum elemento
