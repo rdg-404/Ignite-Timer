@@ -1,8 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form"
 import { HandPalm, Play } from "phosphor-react";
+
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod" //importa tudo da lib com o nome de zod
+
+
 import {  HomeContainer,  StartCountdownButton, StopCountdownButton } from "./styles";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
@@ -37,7 +41,7 @@ export function Home() {
 
 
 
-
+  
   // console.log(activeCycle)
 
   const task = watch('task')

@@ -15,6 +15,7 @@ interface CreateCycleData {
 }
 
 interface CycleContextType {
+  cycles: Cycle[]
   activeCycle: Cycle | undefined
   activeCycleId: string | null
   amountSecondsPassed: number,
@@ -32,7 +33,7 @@ interface CyclesContextProviderProps {
   children: ReactNode //aceita qualquer html valido dentro da tag
 }
 
-export function CyclesContextProvider({children}){
+export function CyclesContextProvider({children}: CyclesContextProviderProps){
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
@@ -94,6 +95,7 @@ export function CyclesContextProvider({children}){
   return (
           <CycleContext.Provider 
             value={{ 
+              cycles,
               activeCycle, 
               activeCycleId, 
               markCurrentCycleAsFinished, 
