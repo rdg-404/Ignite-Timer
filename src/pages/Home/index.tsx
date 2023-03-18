@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form"
 import { HandPalm, Play } from "phosphor-react";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -6,12 +6,7 @@ import * as zod from "zod" //importa tudo da lib com o nome de zod
 import {  HomeContainer,  StartCountdownButton, StopCountdownButton } from "./styles";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
-
-
-
-
-
-
+import { CycleContext } from "../../contexts/CyclesContext";
 
 
 //funcao de validacao dos campos
@@ -29,6 +24,8 @@ type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 export function Home() {
   
+  const {activeCycle ,createNewCycle, interruptCurrentCycle} = useContext(CycleContext)
+
   const newCycleForm = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
@@ -49,13 +46,13 @@ export function Home() {
 
   return (
     <HomeContainer>
-      <form onSubmit={handleSubmit(handleCreateNewCycle)}>
+      <form onSubmit={handleSubmit(createNewCycle)}>
           <FormProvider {...newCycleForm}> 
             <NewCycleForm/>
           </FormProvider>
           <Countdown />
       {activeCycle ? (
-        <StopCountdownButton onClick={handleInterruptCycle} type="button">
+        <StopCountdownButton onClick={interruptCurrentCycle} type="button">
           <HandPalm size={24}/>
           Interromper
         </StopCountdownButton>
