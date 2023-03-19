@@ -74,7 +74,7 @@ export function CyclesContextProvider({children}: CyclesContextProviderProps){
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
     setAmountSecondsPassed(0) //zerar a comtagem de segundos
-    // reset() //apos enviar reseta os campos aos valores padrao
+    
   }
 
   //funcao para salvar o ciclo atual interrompido
