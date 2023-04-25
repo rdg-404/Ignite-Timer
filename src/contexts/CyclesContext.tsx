@@ -33,19 +33,47 @@ interface CyclesContextProviderProps {
   children: ReactNode //aceita qualquer html valido dentro da tag
 }
 
+interface CyclesState {
+  cycles: Cycle[]
+  activeCycleId: string | null
+}
+
 export function CyclesContextProvider({children}: CyclesContextProviderProps){
-  const [cycles, dispatch] = useReducer((state: Cycle[], action: any) => {
+  const [cyclesState, dispatch] = useReducer((state: CyclesState, action: any) => {
     if(action.type === "ADD_NEW_CYCLE"){
-      return[...state, action.payload.newCycle]
+      return {
+        ...state,
+        cycles: [...state.cycles, action.payload.newCycle],
+        activeCycleId: action.payload.newCycle.id,
+      }
+    }
+
+    if(action.type === 'INTERRUPT_CURRENT_CYCLE'){
+      return {
+        ...state,
+        cycles: state.cycles.map((cycle) => {
+          if(cycle.id === state.activeCycleId) {
+            return {...cycle, interruptedDate: new Date()}
+          }else {
+            return cycle
+          }
+        }),
+        activeCycleId: null
+      }
     }
 
     return state
-  }, [])
+  }, {
+    cycles: [],
+    activeCycleId: null,
+  })
 
 
-  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   //percorre o array de cycle e verifica se o id do cycle é igual ao cycle ativo  
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+  
+  const { cycles, activeCycleId } = cyclesState;
+
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
@@ -95,7 +123,7 @@ export function CyclesContextProvider({children}: CyclesContextProviderProps){
       }  
     })
     // setCycles((state) => [...state, newCycle])
-    setActiveCycleId(id)
+
     setAmountSecondsPassed(0) //zerar a comtagem de segundos
     
   }
@@ -108,17 +136,8 @@ export function CyclesContextProvider({children}: CyclesContextProviderProps){
         activeCycleId,
       }
     })
-    // setCycles( (state) => 
-    //   state.map((cycle) => {
-    //     if(cycle.id === activeCycleId) {
-    //       return {...cycle, interruptedDate: new Date()}
-    //     }else {
-    //       return cycle
-    //     }
-    //   }),
-    // )
-    /// zera o cronometro
-    setActiveCycleId(null)
+
+
   }
   
   return (
