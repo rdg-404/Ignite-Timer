@@ -28,11 +28,11 @@ Aplicação de contagem regressiva de tempo, estilo pomodoro, com registro de ci
 
 <h3 align="center">Página inicial</h3>
 
-<img src=""/>
+<img src="./assets/home.png"/>
 
-<h3 align="center">Historico de ciclos</h3>
+<h3 align="center">Histórico de ciclos</h3>
 
-<div align="center"><img src=""/></div>
+<div align="center"><img src="./assets/history.png"/></div>
 
 
 
