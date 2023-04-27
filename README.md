@@ -26,7 +26,7 @@ Aplicação hospedada na Vercel... [Clique aqui](https://ignite-timer-alpha-cora
 ## O que foi desenvolvido 🚀
 Aplicação de contagem regressiva de tempo, estilo pomodoro, com registro de ciclos.
 
-<h3 align="center">Página inicial (Versão desktop)</h3>
+<h3 align="center">Página inicial</h3>
 
 <img src=""/>
 
