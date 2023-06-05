@@ -43,6 +43,7 @@ Aplicação de contagem regressiva de tempo, estilo pomodoro, com registro de ci
 - ReactJS
 - Typescript
 - Vite
+- StyledComponents
 - VsCode
 
 
